@@ -1,0 +1,12 @@
+DROP DATABASE IF EXISTS bidding_db;
+
+CREATE DATABASE bidding_db;
+
+USE bidding_db;
+
+CREATE TABLE items
+(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  item VARCHAR (45) NOT NULL,
+  current-bid INT NOT NULL
+);
