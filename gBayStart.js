@@ -1,6 +1,6 @@
 var mysql = require("mysql");
-var sqlPassword = require("password.js");
-var inquirer = require("inquirer.js");
+var sqlPassword = require("./password.js");
+var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -12,37 +12,40 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: sqlPassword,
+  password: sqlPassword.sql(),
   database: "bidding_db"
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
+  if (err) throw err;
+  //console.log("connected as id " + connection.threadId);
+});
+
+
+function queryAllItems() {
+  connection.query("SELECT * FROM items", function (err, res) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
-    queryAllItems();
-    queryCurrentBids();
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i].id + " | " + res[i].item + " | " + res[i].current - bid);
+    }
+    console.log("-----------------------------------");
+  });
+}
+
+function queryCurrentBids() {
+  var query = connection.query("SELECT * FROM items WHERE current_bid=true", function (err, res) {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i].id + " | " + res[i].item + " | " + res[i].current - bid);
+    }
   });
 
-  function queryAllItems() {
-    connection.query("SELECT * FROM items", function(err, res) {
-      if (err) throw err;
-      for (var i = 0; i < res.length; i++) {
-        console.log(res[i].id + " | " + res[i].item + " | " + res[i].current-bid);
-      }
-      console.log("-----------------------------------");
-    });
-  }
+  // logs the actual query being run
+  console.log(query.sql);
+}
 
-  function queryCurrentBids() {
-    var query = connection.query("SELECT * FROM items WHERE current-bid=true", function(err, res) {
-      if (err) throw err;
-      for (var i = 0; i < res.length; i++) {
-        console.log(res[i].id + " | " + res[i].item + " | " + res[i].current-bid);
-      }
-    });
-  
-    // logs the actual query being run
-    console.log(query.sql);
-    connection.end();
-  }
+module.exports = {
+  queryAllItems: ()=> queryAllItems(),
+  queryCurrentBids: ()=> queryCurrentBids()
+};
 

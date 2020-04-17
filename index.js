@@ -3,8 +3,9 @@
 // ####################################################
 const passwords = require('./password');
 const inquirer = require('inquirer');
+const gBayDB = require('./gBayStart.js');
 
-console.log(passwords.sql());
+
 
 
 // ####################################################
@@ -25,7 +26,7 @@ function mainMenu(){
 
 // post a new item to the database that others can bid on
 function postItem(){
-    console.log('stub');
+    gBayDB.queryCurrentBids();
 }
 
 // attempt to set anew bid for an item in the database
@@ -43,10 +44,10 @@ async function run(){
 
         switch (action){
             case 'Post':
-                postItem();
+                await postItem();
                 break;
             case 'Bid':
-                bidOnItem();
+                await bidOnItem();
                 break;
             case 'Exit':
                 break;
