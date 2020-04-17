@@ -1,6 +1,6 @@
 var mysql = require("mysql");
 var sqlPassword = require("password.js");
-var inquirer = require("inquirer.js");
+var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -46,3 +46,7 @@ connection.connect(function(err) {
     connection.end();
   }
 
+  module.exports = {
+      queryAllItems: queryAllItems(),
+      queryCurrentBids: queryCurrentBids()
+  }
